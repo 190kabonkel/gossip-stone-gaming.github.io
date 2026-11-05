@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JS Assets</title>
+<style>
+:root {
+  --bg: #e9f1f5; --bg2: #d3e4ec; --card: #ffffff; --text: #14202b; --muted: #5b6b78;
+  --line: #d5e0e7; --accent: #1b145e; --accent2: #3a2bd6; --on-accent: #ffffff;
+  --btn: #ade9ff; --btn-text: #0b2a36; --red: #9f0e0e; --field: #f5f9fb;
+  --shadow: 0 10px 30px rgba(27,20,94,.12);
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1620; --bg2: #14202d; --card: #172230; --text: #e8f0f6; --muted: #92a4b3;
+    --line: #26384a; --accent: #8ea2ff; --accent2: #b09cff; --on-accent: #0e1620;
+    --btn: #1f3b4d; --btn-text: #d9f3ff; --red: #ff8a8a; --field: #0f1923; --shadow: 0 10px 30px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1620; --bg2: #14202d; --card: #172230; --text: #e8f0f6; --muted: #92a4b3;
+  --line: #26384a; --accent: #8ea2ff; --accent2: #b09cff; --on-accent: #0e1620;
+  --btn: #1f3b4d; --btn-text: #d9f3ff; --red: #ff8a8a; --field: #0f1923; --shadow: 0 10px 30px rgba(0,0,0,.4);
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0; min-height: 100vh; color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: radial-gradient(1200px 500px at 50% -10%, var(--bg2), var(--bg));
+  background-color: var(--bg);
+}
+header { text-align: center; padding: 56px 20px 24px; }
+h1 {
+  margin: 0; font-size: clamp(40px, 8vw, 72px); font-weight: 800; letter-spacing: -0.03em; font-style: italic;
+  background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+header p { margin: 8px auto 0; color: var(--muted); max-width: 520px; }
+main { max-width: 760px; margin: 0 auto; padding: 0 16px 60px; }
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+  box-shadow: var(--shadow); padding: 24px; display: grid;
+  grid-template-columns: minmax(0, 1fr); gap: 18px;
+}
+.card > * { min-width: 0; }
+.head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.num { background: var(--accent); color: var(--on-accent); font-weight: 700; border-radius: 10px; padding: 2px 10px; }
+.head h3 { margin: 0; font-size: 22px; }
+.tag { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+.desc { margin: 0; color: var(--muted); }
+.preview {
+  text-align: center; border-radius: 16px; padding: 28px 16px;
+  background: linear-gradient(135deg, #1b145e, #3a2bd6); color: #fff;
+  font-size: clamp(28px, 6vw, 46px); font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: .02em;
+}
+.opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.opts label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+input[type=text], input[type=datetime-local] {
+  font: inherit; color: var(--text); background: var(--field); border: 1px solid var(--line);
+  border-radius: 10px; padding: 9px 11px; min-width: 0; width: 100%;
+}
+input:focus-visible, button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+.units { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex !important; grid-template-columns: none; align-items: center; gap: 6px !important; cursor: pointer;
+  background: var(--field); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; color: var(--text) !important; }
+.chip input { accent-color: var(--accent2); margin: 0; }
+.linkrow { display: flex; gap: 8px; align-items: stretch; }
+.linkbox {
+  flex: 1; min-width: 0; font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace; color: var(--muted);
+  background: var(--field); border: 1px dashed var(--line); border-radius: 10px; padding: 9px 11px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+button {
+  font: inherit; font-weight: 600; cursor: pointer; border-radius: 10px; padding: 9px 16px;
+  border: 1px solid var(--line); background: var(--btn); color: var(--btn-text); transition: transform .08s, filter .15s;
+}
+button:hover { filter: brightness(1.06); } button:active { transform: scale(.97); }
+button.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: var(--on-accent); border: 0; }
+textarea {
+  width: 100%; height: 220px; resize: vertical; font: 13px/1.5 ui-monospace, Menlo, Consolas, monospace;
+  color: var(--text); background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 12px;
+}
+#toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px);
+  background: var(--accent); color: var(--on-accent); padding: 10px 18px; border-radius: 999px; font-weight: 600;
+  opacity: 0; pointer-events: none; transition: .25s;
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+[hidden] { display: none !important; }
+@media (max-width: 520px) { .card { padding: 16px; } .linkrow { flex-direction: column; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>JS Assets</h1>
+  <p>Customise an asset, copy its link, and paste it into a &lt;script src&gt; tag.</p>
+</header>
+
+<main>
+  <section class="card" id="asset-timer">
+    <div class="head">
+      <span class="num">1</span><h3>timer.js</h3><span class="tag">Countdown</span>
+    </div>
+    <p class="desc">Writes a live countdown into any element on your page. Change the options and the preview and link update instantly.</p>
+
+    <div class="preview" id="timer">--</div>
+
+    <div class="opts">
+      <label>Target date &amp; time <input type="datetime-local" id="o-date" value="2026-08-29T11:30:00" step="1"></label>
+      <label>Element id <input type="text" id="o-id" value="timer"></label>
+      <label>Text when finished <input type="text" id="o-done" value="0d 0h 0m 0s"></label>
+      <label>Separator <input type="text" id="o-sep" value=" "></label>
+    </div>
+
+    <div class="units">
+      <label class="chip"><input type="checkbox" id="o-d" checked> Days</label>
+      <label class="chip"><input type="checkbox" id="o-h" checked> Hours</label>
+      <label class="chip"><input type="checkbox" id="o-m" checked> Minutes</label>
+      <label class="chip"><input type="checkbox" id="o-s" checked> Seconds</label>
+      <label class="chip"><input type="checkbox" id="o-pad"> Zero-pad</label>
+    </div>
+
+    <div class="linkrow">
+      <div class="linkbox" id="linkbox"></div>
+      <button class="primary" id="copy-link">Copy link</button>
+    </div>
+    <div class="actions">
+      <button id="copy-tag">Copy &lt;script&gt; tag</button>
+      <button id="copy-code">Copy code</button>
+      <button id="toggle-code">View code</button>
+    </div>
+    <textarea id="code" readonly hidden></textarea>
+  </section>
+</main>
+<div id="toast" role="status"></div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var inputs = ["o-date","o-id","o-done","o-sep","o-d","o-h","o-m","o-s","o-pad"];
+  var stop = null, tt = null;
+
+  function cfg() {
+    return {
+      end: $("o-date").value || "2026-08-29T11:30:00",
+      id: $("o-id").value.trim() || "timer",
+      done: $("o-done").value, sep: $("o-sep").value,
+      units: { d: $("o-d").checked, h: $("o-h").checked, m: $("o-m").checked, s: $("o-s").checked },
+      pad: $("o-pad").checked
+    };
+  }
+  function build(c) {
+    var end = c.end.length === 16 ? c.end + ":00" : c.end;
+    return [
+      "// timer.js - customisable countdown",
+      "(function () {",
+      "    const CONFIG = {",
+      "        end: " + JSON.stringify(end) + ",",
+      "        id: " + JSON.stringify(c.id) + ",",
+      "        doneText: " + JSON.stringify(c.done) + ",",
+      "        separator: " + JSON.stringify(c.sep) + ",",
+      "        show: " + JSON.stringify(c.units) + ",",
+      "        pad: " + c.pad,
+      "    };",
+      "",
+      "    const end = new Date(CONFIG.end).getTime();",
+      "    const fmt = n => CONFIG.pad ? String(n).padStart(2, \"0\") : String(n);",
+      "",
+      "    function tick() {",
+      "        const el = document.getElementById(CONFIG.id);",
+      "        if (!el) return;",
+      "        const time = Math.max(0, end - Date.now());",
+      "        if (time === 0 && CONFIG.doneText !== \"\") { el.textContent = CONFIG.doneText; return; }",
+      "        const parts = [];",
+      "        if (CONFIG.show.d) parts.push(fmt(Math.floor(time / 86400000)) + \"d\");",
+      "        if (CONFIG.show.h) parts.push(fmt(Math.floor(time / 3600000) % 24) + \"h\");",
+      "        if (CONFIG.show.m) parts.push(fmt(Math.floor(time / 60000) % 60) + \"m\");",
+      "        if (CONFIG.show.s) parts.push(fmt(Math.floor(time / 1000) % 60) + \"s\");",
+      "        el.textContent = parts.join(CONFIG.separator);",
+      "    }",
+      "",
+      "    tick();",
+      "    setInterval(tick, 1000);",
+      "})();",
+      ""
+    ].join("\n");
+  }
+  function toLink(code) { return "data:text/javascript;base64," + btoa(unescape(encodeURIComponent(code))); }
+
+  function refresh() {
+    var c = cfg(), code = build(c);
+    $("code").value = code;
+    $("linkbox").textContent = toLink(code);
+    if (stop) clearInterval(stop);
+    var end = new Date(c.end.length === 16 ? c.end + ":00" : c.end).getTime(), pv = $("timer");
+    var f = function (n) { return c.pad ? String(n).padStart(2, "0") : String(n); };
+    function tick() {
+      var t = Math.max(0, end - Date.now());
+      if (t === 0 && c.done !== "") { pv.textContent = c.done; return; }
+      var p = [];
+      if (c.units.d) p.push(f(Math.floor(t / 86400000)) + "d");
+      if (c.units.h) p.push(f(Math.floor(t / 3600000) % 24) + "h");
+      if (c.units.m) p.push(f(Math.floor(t / 60000) % 60) + "m");
+      if (c.units.s) p.push(f(Math.floor(t / 1000) % 60) + "s");
+      pv.textContent = p.join(c.sep) || "Pick at least one unit";
+    }
+    tick(); stop = setInterval(tick, 1000);
+  }
+  function say(m) {
+    var t = $("toast"); t.textContent = m; t.classList.add("show");
+    clearTimeout(tt); tt = setTimeout(function () { t.classList.remove("show"); }, 2000);
+  }
+  function copy(text, ok) {
+    function fb() {
+      var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); say(ok); } catch (e) { say("Copy failed"); }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { say(ok); }, fb);
+    else fb();
+  }
+  inputs.forEach(function (id) { $(id).addEventListener("input", refresh); $(id).addEventListener("change", refresh); });
+  $("copy-link").onclick = function () { copy(toLink(build(cfg())), "Link copied"); };
+  $("copy-tag").onclick = function () { copy('<script src="' + toLink(build(cfg())) + '"><\/script>', "Script tag copied"); };
+  $("copy-code").onclick = function () { copy(build(cfg()), "Code copied"); };
+  $("toggle-code").onclick = function () {
+    var ta = $("code"); ta.hidden = !ta.hidden; this.textContent = ta.hidden ? "View code" : "Hide code";
+  };
+  refresh();
+})();
+</script>
+</body>
+</html>
