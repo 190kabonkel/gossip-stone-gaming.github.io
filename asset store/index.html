@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JS Assets — Timer</title>
+<style>
+:root{--bg:#e9f1f5;--bg2:#d3e4ec;--card:#fff;--text:#14202b;--muted:#5b6b78;--line:#d5e0e7;--accent:#1b145e;--accent2:#3a2bd6;--on-accent:#fff;--btn:#ade9ff;--btn-text:#0b2a36;--field:#f5f9fb;--shadow:0 10px 30px rgba(27,20,94,.12)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1620;--bg2:#14202d;--card:#172230;--text:#e8f0f6;--muted:#92a4b3;--line:#26384a;--accent:#8ea2ff;--accent2:#b09cff;--on-accent:#0e1620;--btn:#1f3b4d;--btn-text:#d9f3ff;--field:#0f1923;--shadow:0 10px 30px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#0e1620;--bg2:#14202d;--card:#172230;--text:#e8f0f6;--muted:#92a4b3;--line:#26384a;--accent:#8ea2ff;--accent2:#b09cff;--on-accent:#0e1620;--btn:#1f3b4d;--btn-text:#d9f3ff;--field:#0f1923;--shadow:0 10px 30px rgba(0,0,0,.4)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:radial-gradient(1200px 500px at 50% -10%,var(--bg2),var(--bg));background-color:var(--bg)}
+header{text-align:center;padding:52px 20px 24px}h1{margin:0;font-size:clamp(40px,8vw,72px);font-weight:800;letter-spacing:-.03em;font-style:italic;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+header p{margin:8px auto 0;color:var(--muted);max-width:580px}main{max-width:760px;margin:0 auto;padding:0 16px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:24px;display:grid;gap:18px}
+.head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.num{background:var(--accent);color:var(--on-accent);font-weight:700;border-radius:10px;padding:2px 10px}.head h2{margin:0;font-size:22px}.tag{margin-left:auto;font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 10px}.desc{margin:0;color:var(--muted)}
+.preview{border-radius:16px;padding:28px 16px;background:linear-gradient(135deg,#1b145e,#3a2bd6);color:#fff;text-align:center;font-family:"VT323",monospace;font-size:clamp(32px,7vw,48px);font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}.opts label{display:grid;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+input[type=text],input[type=datetime-local]{font:inherit;color:var(--text);background:var(--field);border:1px solid var(--line);border-radius:10px;padding:9px 11px;min-width:0;width:100%}
+input:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+.units{display:flex;flex-wrap:wrap;gap:8px}.chip{display:inline-flex!important;align-items:center;gap:6px!important;background:var(--field);border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--text)!important;cursor:pointer}.chip input{accent-color:var(--accent2);margin:0}
+.linkbox{width:100%;min-width:0;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:var(--muted);background:var(--field);border:1px dashed var(--line);border-radius:10px;padding:10px 12px;overflow-wrap:anywhere;word-break:break-all}.actions{display:flex;flex-wrap:wrap;gap:8px}button{font:inherit;font-weight:600;cursor:pointer;border-radius:10px;padding:9px 16px;border:1px solid var(--line);background:var(--btn);color:var(--btn-text);transition:transform .08s,filter .15s}button:hover{filter:brightness(1.06)}button:active{transform:scale(.97)}button.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--on-accent);border:0}
+textarea{width:100%;min-height:260px;resize:vertical;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--text);background:var(--field);border:1px solid var(--line);border-radius:12px;padding:12px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--accent);color:var(--on-accent);padding:10px 18px;border-radius:999px;font-weight:600;opacity:0;pointer-events:none;transition:.25s}#toast.show{opacity:1;transform:translate(-50%,0)}[hidden]{display:none!important}
+@media(max-width:520px){.card{padding:16px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>JS Assets</h1>
+  <p>Vind en configureer losse JavaScript-assets voor je website. Kies een asset, pas de instellingen aan en download het bestand.</p>
+</header>
+<main>
+  <section class="card" id="asset-timer">
+    <div class="head"><span class="num">01</span><h2>timer.js</h2><span class="tag">Countdown</span></div>
+    <p class="desc">Een zelfstandige countdown-timer. Deze asset voegt alleen een timer toe aan je pagina — geen socialmedia- of websiteknoppen.</p>
+    <div class="preview" id="preview">--</div>
+
+    <div class="opts">
+      <label>Doeldatum en tijd
+        <input type="datetime-local" id="end" value="2026-11-11T15:30:00" step="1">
+      </label>
+      <label>Element-ID
+        <input type="text" id="element-id" value="site-countdown">
+      </label>
+      <label>Tekst wanneer de timer klaar is
+        <input type="text" id="done" value="0d 0h 0m 0s">
+      </label>
+      <label>Scheidingsteken
+        <input type="text" id="separator" value=" ">
+      </label>
+      <label>Lettertype
+        <input type="text" id="font" value='"VT323", monospace'>
+      </label>
+      <label>Lettergrootte
+        <input type="text" id="font-size" value="48px">
+      </label>
+      <label>Uitlijning
+        <select id="align"><option value="center" selected>Gecentreerd</option><option value="left">Links</option><option value="right">Rechts</option></select>
+      </label>
+      <label>Marge
+        <input type="text" id="margin" value="12px auto">
+      </label>
+      <label>Plaats na CSS-selector
+        <input type="text" id="place" value="h1" placeholder="h1 (leeg = bovenaan)">
+      </label>
+    </div>
+
+    <div class="units">
+      <label class="chip"><input type="checkbox" id="show-d" checked> Dagen</label>
+      <label class="chip"><input type="checkbox" id="show-h" checked> Uren</label>
+      <label class="chip"><input type="checkbox" id="show-m" checked> Minuten</label>
+      <label class="chip"><input type="checkbox" id="show-s" checked> Seconden</label>
+      <label class="chip"><input type="checkbox" id="pad"> Nullen aanvullen</label>
+    </div>
+
+    <div>
+      <label for="base64-link" style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">Base64-link (data URL)</label>
+      <div class="linkbox" id="base64-link">Wordt gegenereerd…</div>
+    </div>
+    <div class="actions">
+      <button class="primary" id="download">Download timer.js</button>
+      <button id="copy-link">Kopieer Base64-link</button>
+      <button id="copy-tag">Kopieer script-tag</button>
+      <button id="copy">Kopieer code</button>
+      <button id="toggle">Bekijk code</button>
+    </div>
+    <textarea id="code" readonly hidden aria-label="Gegenereerde timer.js code"></textarea>
+    <p class="desc">Gebruik op je website: <code>&lt;script src="/timer.js"&gt;&lt;/script&gt;</code></p>
+  </section>
+</main>
+<div id="toast" role="status"></div>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  let interval, toastTimer;
+  const inputIds = ["end","element-id","done","separator","font","font-size","align","margin","place","show-d","show-h","show-m","show-s","pad"];
+
+  function config(){
+    const rawEnd = $("end").value || "2026-11-11T15:30:00";
+    return {
+      end: rawEnd.length === 16 ? rawEnd + ":00" : rawEnd,
+      id: $("element-id").value.trim() || "site-countdown",
+      doneText: $("done").value,
+      separator: $("separator").value,
+      place: $("place").value.trim(),
+      show: {d:$("show-d").checked,h:$("show-h").checked,m:$("show-m").checked,s:$("show-s").checked},
+      pad: $("pad").checked,
+      style: {fontFamily:$("font").value,fontSize:$("font-size").value,textAlign:$("align").value,margin:$("margin").value}
+    };
+  }
+
+  function build(c){
+    return `// timer.js — zelfstandige countdown asset
+(function () {
+    const CONFIG = ${JSON.stringify(c, null, 4)};
+    function init() {
+        if (document.getElementById(CONFIG.id)) return;
+        const el = document.createElement("div");
+        el.id = CONFIG.id;
+        Object.assign(el.style, CONFIG.style);
+
+        const anchor = CONFIG.place && document.querySelector(CONFIG.place);
+        if (anchor) anchor.insertAdjacentElement("afterend", el);
+        else document.body.insertBefore(el, document.body.firstChild);
+
+        const endTime = new Date(CONFIG.end).getTime();
+        const format = n => CONFIG.pad ? String(n).padStart(2, "0") : String(n);
+        let interval;
+        function tick() {
+            const remaining = Math.max(0, endTime - Date.now());
+            if (remaining === 0 && CONFIG.doneText !== "") {
+                el.textContent = CONFIG.doneText;
+                clearInterval(interval);
+                return;
+            }
+            const parts = [];
+            if (CONFIG.show.d) parts.push(format(Math.floor(remaining / 86400000)) + "d");
+            if (CONFIG.show.h) parts.push(format(Math.floor(remaining / 3600000) % 24) + "h");
+            if (CONFIG.show.m) parts.push(format(Math.floor(remaining / 60000) % 60) + "m");
+            if (CONFIG.show.s) parts.push(format(Math.floor(remaining / 1000) % 60) + "s");
+            el.textContent = parts.join(CONFIG.separator);
+        }
+        tick();
+        interval = setInterval(tick, 1000);
+    }
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init, {once:true});
+    } else {
+        init();
+    }
+})();
+`;
+  }
+
+  function toBase64DataUrl(code){
+    const bytes = new TextEncoder().encode(code);
+    let binary = "";
+    bytes.forEach(byte => binary += String.fromCharCode(byte));
+    return "data:text/javascript;base64," + btoa(binary);
+  }
+
+  function render(){
+    const c = config();
+    const generatedCode = build(c);
+    $("code").value = generatedCode;
+    $("base64-link").textContent = toBase64DataUrl(generatedCode);
+    const preview = $("preview");
+    preview.style.fontFamily = c.style.fontFamily;
+    preview.style.fontSize = c.style.fontSize;
+    preview.style.textAlign = c.style.textAlign;
+    preview.style.margin = c.style.margin;
+    clearInterval(interval);
+    function tick(){
+      const remaining = Math.max(0, new Date(c.end).getTime() - Date.now());
+      if (remaining === 0 && c.doneText !== "") { preview.textContent = c.doneText; return; }
+      const f = n => c.pad ? String(n).padStart(2,"0") : String(n);
+      const p = [];
+      if(c.show.d)p.push(f(Math.floor(remaining/86400000))+"d");
+      if(c.show.h)p.push(f(Math.floor(remaining/3600000)%24)+"h");
+      if(c.show.m)p.push(f(Math.floor(remaining/60000)%60)+"m");
+      if(c.show.s)p.push(f(Math.floor(remaining/1000)%60)+"s");
+      preview.textContent = p.join(c.separator) || "Selecteer minstens één tijdseenheid";
+    }
+    tick();
+    interval = setInterval(tick,1000);
+  }
+
+  function toast(message){
+    const el=$("toast");el.textContent=message;el.classList.add("show");
+    clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),1800);
+  }
+  function download(){
+    const blob=new Blob([build(config())],{type:"text/javascript;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");a.href=url;a.download="timer.js";a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);toast("timer.js gedownload");
+  }
+  async function copyText(value, success){
+    try{await navigator.clipboard.writeText(value);toast(success);}
+    catch(e){
+      const temp=document.createElement("textarea");temp.value=value;document.body.appendChild(temp);temp.select();
+      try{document.execCommand("copy");toast(success);}catch(err){toast("Kopiëren mislukt");}
+      temp.remove();
+    }
+  }
+  function copy(){copyText(build(config()),"Code gekopieerd");}
+  function copyLink(){copyText(toBase64DataUrl(build(config())),"Base64-link gekopieerd");}
+  function copyTag(){
+    const url=toBase64DataUrl(build(config()));
+    copyText('<script src="'+url+'"><\/script>',"Script-tag gekopieerd");
+  }
+  inputIds.forEach(id=>{ $(id).addEventListener("input",render); $(id).addEventListener("change",render); });
+  $("download").addEventListener("click",download);
+  $("copy-link").addEventListener("click",copyLink);
+  $("copy-tag").addEventListener("click",copyTag);
+  $("copy").addEventListener("click",copy);
+  $("toggle").addEventListener("click",()=>{
+    const area=$("code");area.hidden=!area.hidden;
+    $("toggle").textContent=area.hidden?"Bekijk code":"Verberg code";
+  });
+  render();
+})();
+</script>
+</body>
+</html>
